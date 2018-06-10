@@ -1,0 +1,30 @@
+{
+		"name":"A党",
+		"children":
+			[
+				{
+				 "name": "pesonA",
+				 "total":"10",
+"img":  "http://127.0.0.1:8080/images/images.jpeg"
+				},
+				{
+				 "name": "pesonB",
+				 "total":"100",
+"img":  "http://127.0.0.1:8080/images/index1.jpeg"
+				},
+{
+
+				 "name": "pesonC",
+				 "total":"25",
+"img":  "http://127.0.0.1:8080/images/index.jpeg"
+				},
+				{
+				 "name": "pesonD",
+				 "total":"11",
+"img":  "http://127.0.0.1:8080/images/hib.jpg"
+				}
+			]
+		}
+
+
+

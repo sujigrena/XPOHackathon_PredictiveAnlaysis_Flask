@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static',filename='style.css')}}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+    <script src="{{ url_for('static',filename='d3.v3.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='myscript.js')}}"></script>
+    <style type="text/css">
+
+.chart {
+  display: block;
+  margin: auto;
+  margin-top: 40px;
+}
+
+text {
+  font-size: 11px;
+}
+
+rect {
+  fill: none;
+}
+
+  </style>
+  </head>
+  <body onload="myFunction()">
+  <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                 </button>
+                <a class="navbar-brand" href="{{ url_for('index') }}"><span style="color:red;">XPO</span> Logistics</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+		<ul class="nav navbar-nav navbar">
+                    <li><a id="fade" href="#" onclick=myfunc()>Zip Code</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a id="fade" href="{{ url_for('map_page') }}"><button type="button" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-map-marker"></span> Map
+        </button></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="background">
+    <div id="body">
+</div>
+<div id="foreground">
+<br><br><br><br><br><br><br><br>
+<div class="col-md-4 col-xs-offset-4">
+<form method="post" action="{{url_for( 'process_data')}}" enctype="multipart/form-data">
+	<div class="input-group">
+      <input name="zip" type="text" class="form-control" placeholder="Zip Code">
+      <span class="input-group-btn">
+        <button class="btn btn-secondary" type="submit">Go!</button>
+      </span>
+   </div>
+</form>
+</div>
+   </div>
+      <div id="footer">
+        
+        <div class="hint"></div>
+        
+      </div>
+    </div>
+
+<script type="text/javascript">
+
+
+
+var w = 1280 - 80,
+    h = 800 - 180,
+    x = d3.scale.linear().range([0, w]),
+    y = d3.scale.linear().range([0, h]),
+    color = d3.scale.category20c(),
+    root,
+    node;
+
+var treemap = d3.layout.treemap()
+    .round(false)
+    .size([w, h])
+    .sticky(true)
+    .value(function(d) { return d.total; });
+
+var svg = d3.select("#body").append("div")
+    .attr("class", "chart")
+    .style("width", w + "px")
+    .style("height", h + "px")
+    .append("svg:svg")
+    .attr("width", w)
+    .attr("height", h)
+    .append("svg:g")
+    
+
+d3.json("{{ url_for('static',filename='myjson.json')}}", function(data) {
+  node = root = data;
+  var nodes = treemap.nodes(root)
+      .filter(function(d) {return !d.children; });
+
+  var cell = svg.selectAll("g")
+      .data(nodes)
+      .enter().append("svg:g")
+      .attr("class", "cell")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+      //.on("click", function(d) { return zoom(node == d.parent ? root : d.parent); });
+
+
+  cell.append("rect")
+      .attr("width", function(d) { return d.dx - 1; })
+      .attr("height", function(d) { return d.dy - 1; })
+      .attr('background-size', 'contain')
+      .style("fill", function(d) { return "url(#"+d.name+")"; });
+
+cell.append("defs").append("pattern")
+.attr("id", function(d) { return d.name; })
+.attr("width", "100%")
+.attr("height", function(d) { return d.dy - 1; })
+.attr('patternUnits', 'userSpaceOnUse')
+//.attr('background-size', 'contain')
+.append("image")
+.attr("preserveAspectRatio", "none")
+.attr("xmlns:xlink","http://www.w3.org/1999/xlink")
+.attr("width",function(d) { return d.dx - 1; })
+.attr("height", function(d) { return d.dy - 1; })
+.attr("xlink:href", function(d) { return d.img ;});
+//.attr('background-repeat', 'no-repeat')
+//.attr('background-size', 'contain')
+
+
+
+/*  cell.append("svg:text")
+      .attr("x", function(d) { return d.dx / 2; })
+      .attr("y", function(d) { return d.dy / 2; })
+      .attr("dy", ".35em")
+      .attr("text-anchor", "middle")
+      .text(function(d) { return d.name; })
+      .style("opacity", function(d) { d.w = this.getComputedTextLength(); return d.dx > d.w ? 1 : 0; });
+*/
+
+  d3.select("select").on("change", function() {
+    //treemap.value(this.value == "size" ? size : count).nodes(root);
+    treemap.value((this.value == "total") ? total : (this.value == "building") ? building : (this.value == "ground") ? ground : cash).nodes(root);
+   
+  });
+});
+
+    </script>
+  </body>
+</html>

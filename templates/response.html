@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static',filename='style.css')}}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link class="jsbin" href="{{ url_for('static',filename='jquery-ui.css')}}" rel="stylesheet" type="text/css" />
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+    <script src="{{ url_for('static',filename='d3.v3.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='myscript.js')}}"></script>
+    <script src="{{ url_for('static', filename='imageMapResizer.min.js')}}"></script>
+    <style type="text/css">
+
+.chart {
+  display: block;
+  margin: auto;
+  margin-top: 40px;
+}
+
+text {
+  font-size: 11px;
+}
+
+rect {
+  fill: none;
+}
+canvas
+{
+    pointer-events: none;       /* make the canvas transparent to the mouse - needed since canvas is position infront of image */
+    position: absolute;
+}
+
+  </style>
+  </head>
+  <body>
+
+  <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                 </button>
+                <a class="navbar-brand" href="{{ url_for('index') }}"><span style="color:red;">XPO</span> Logistics</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+	    <ul class="nav navbar-nav navbar">
+                    <li><a id="fade" href="{{ url_for('index') }}"	>Zip Code</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a id="fade" href="#"><button type="button" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-map-marker"></span> Map
+        </button></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="body">
+
+<form class="form-horizontal">
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">Zip Code</label>
+    <div class="col-md-6 mb-3">
+      <input type="text" class="form-control" id="inputEmail3" placeholder="" value= {{my_response[0]}}>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">Predicted Product</label>
+    <div class="col-md-6 mb-3">
+      <input type="text" class="form-control" id="inputPassword3" value=" {{my_response[1]}} ">
+    </div>
+  </div>
+</form>
+
+
+</div>
+
+
+</div>
+<script>
+
+
+/*function myHover(element)
+{
+    var hoveredElement = element;
+    var coordStr = element.getAttribute('coords');
+    var areaType = element.getAttribute('shape');
+    var src = element.getAttribute('href');
+    
+    element.style.backgroundImage= 'url(' + src + ')';
+   // alert(src);
+}
+
+function myLeave()
+{
+    var canvas = byId('myCanvas');
+    hdc.clearRect(0, 0, canvas.width, canvas.height);
+}*/
+
+
+</script>
+</body>
+</html>
